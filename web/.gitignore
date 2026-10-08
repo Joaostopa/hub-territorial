@@ -1,0 +1,5 @@
+node_modules/
+.sites-runtime/
+public/imoveis.json
+public/historico.json
+public/pois.json
