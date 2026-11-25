@@ -30,6 +30,10 @@ O código está mantido privado. Nenhuma mudança de visibilidade foi aplicada a
 
 ## Apresentação web
 
+Uma única plataforma React (`web/`, publicada em `docs/`) atende todas as cidades: troque a cidade no menu lateral e a mesma página carrega os dados dela. Endereços: `…/hub-territorial-londrina/?cidade=Londrina` e `…/?cidade=Curitiba` (o antigo `…/curitiba/` redireciona). A Visão executiva traz venda × aluguel, radar de bairros com rentabilidade bruta anunciada, mix por dormitórios, idade dos anúncios e movimento semanal estimado (depende de coletas completas recorrentes).
+
+Itens abaixo descrevem a versão anterior da página de Londrina:
+
 - Mapa com desenho de círculo; localização aproximada conforme os portais.
 - Lista e indicadores incluem anúncios sem coordenadas enquanto nenhum raio está selecionado.
 - Busca textual por dados disponíveis de título, bairro, endereço e identificador; não geocodifica automaticamente.

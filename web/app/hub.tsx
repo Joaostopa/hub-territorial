@@ -34,9 +34,10 @@ const stamp=(s:string)=>s?new Date(s).toLocaleString('pt-BR'):'—';
 const blank={listings:[] as Listing[],areas:[] as any[],rivals:[] as any[],runs:[] as any[],meshes:[] as any[],reports:[] as any[],history:[] as any[]};
 function Choice({value,onChange,options,label}:{value:string;onChange:(v:string)=>void;options:{value:string;label:string}[];label:string}){return <Select value={value} onValueChange={onChange}><SelectTrigger aria-label={label}><SelectValue/></SelectTrigger><SelectContent>{options.map(o=><SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select>}
 function Empty({title,children}:{title:string;children?:React.ReactNode}){return <div className="empty"><MapPin size={24}/><h3>{title}</h3>{children&&<p>{children}</p>}</div>}
+function initialCity(){try{const q=new URLSearchParams(location.search).get('cidade');const hit=cities.find(c=>c.name.toLowerCase()===String(q||'').toLowerCase());return hit?hit.name:'Londrina'}catch{return 'Londrina'}}
 export default function Hub(){
 const [listingPage,setListingPage]=useState(1);
-const [city,setCity]=useState('Curitiba'),[area,setArea]=useState<Area>({lat:-25.4284,lon:-49.2733,radius:1.5}),[tab,setTab]=useState('overview');
+const [city,setCity]=useState(initialCity),[area,setArea]=useState<Area>({lat:-25.4284,lon:-49.2733,radius:1.5}),[tab,setTab]=useState('overview');
 const [data,setData]=useState(blank),[loading,setLoading]=useState(true),[busy,setBusy]=useState(''),[message,setMessage]=useState(''),[error,setError]=useState('');
 const [purpose,setPurpose]=useState('venda'),[source,setSource]=useState('all'),[rooms,setRooms]=useState('0'),[type,setType]=useState('all'),[maxPrice,setMaxPrice]=useState(''),[minArea,setMinArea]=useState(''),[scope,setScope]=useState('city'),[showFilters,setShowFilters]=useState(false);
 const [query,setQuery]=useState(''),[results,setResults]=useState<any[]>([]),[ibge,setIbge]=useState<any>(null),[ibgeError,setIbgeError]=useState(''),[pois,setPois]=useState<any>(null),[poiError,setPoiError]=useState(''),[online,setOnline]=useState(true),[showPOI,setShowPOI]=useState(true),[neighborhoods,setNeighborhoods]=useState<string[]>([]);
@@ -46,6 +47,7 @@ const [importText,setImportText]=useState(''),[meshSource,setMeshSource]=useStat
 const [poiCategories,setPoiCategories]=useState(['restaurant','school','supermarket','pharmacy','fitness_centre','university','hospital','clinic','bus_station','park']),[showListings,setShowListings]=useState(true);
 const [market,setMarket]=useState<{batches:Batch[];labels:any[];transactions:any[]}>({batches:[],labels:[],transactions:[]}),[officialMesh,setOfficialMesh]=useState<any>(null),[neighborhood,setNeighborhood]=useState(''),[minPrice,setMinPrice]=useState(''),[maxArea,setMaxArea]=useState(''),[stage,setStage]=useState('all'),[identity,setIdentity]=useState<Listing|null>(null);
 const revision=useRef(0),cityRef=useRef(city);cityRef.current=city;
+useEffect(()=>{try{const u=new URL(location.href);if(u.searchParams.get('cidade')!==city){u.searchParams.set('cidade',city);window.history.replaceState(null,'',u)}document.title=city+' · Hub Territorial'}catch{}},[city]);
 async function reload(){
  const version=++revision.current,current=cityRef.current;setLoading(true);
  try{

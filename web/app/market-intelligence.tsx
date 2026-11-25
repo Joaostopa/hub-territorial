@@ -255,3 +255,95 @@ export function WeeklyPulse({exits, batches, onTab}: {exits: Exit[]; batches: Ba
     </section>
   );
 }
+
+const DAY = 86400000;
+const share = (part: number, total: number) => (total ? ((100 * part) / total).toLocaleString('pt-BR', {maximumFractionDigits: 1}) + '%' : '—');
+
+export function TypologyMix({rows, purpose}: {rows: Listing[]; purpose: string}) {
+  const groups = useMemo(() => {
+    const defs = [
+      {key: '1', label: '1 dorm.', test: (q: number) => q === 1},
+      {key: '2', label: '2 dorm.', test: (q: number) => q === 2},
+      {key: '3', label: '3 dorm.', test: (q: number) => q === 3},
+      {key: '4', label: '4+ dorm.', test: (q: number) => q >= 4},
+    ];
+    const known = rows.filter((r) => r.quartos != null && r.quartos > 0);
+    return {
+      known: known.length,
+      list: defs.map((d) => {
+        const items = known.filter((r) => d.test(r.quartos!));
+        return {
+          ...d,
+          count: items.length,
+          ticket: items.length >= MIN_SALE ? median(items.map((r) => r.preco)) : null,
+          m2: items.length >= MIN_SALE ? perM2(items) : null,
+          area: items.length >= MIN_SALE ? median(items.filter((r) => r.area_m2).map((r) => r.area_m2!)) : null,
+        };
+      }),
+    };
+  }, [rows]);
+  const max = Math.max(1, ...groups.list.map((g) => g.count));
+  return (
+    <section className="panel mix-panel">
+      <span className="eyebrow">MIX DE PRODUTO</span>
+      <h2>Oferta por número de dormitórios</h2>
+      <p className="small muted">{purpose === 'aluguel' ? 'Aluguel mensal' : 'Venda'} · {n(groups.known)} anúncios com dormitórios informados</p>
+      <div className="mix-list">
+        {groups.list.map((g) => (
+          <div key={g.key} className="mix-row">
+            <div className="mix-label"><strong>{g.label}</strong><small>{share(g.count, groups.known)}</small></div>
+            <div className="mix-bar"><i style={{width: (100 * g.count) / max + '%'}} /><span>{n(g.count)}</span></div>
+            <dl>
+              <div><dt>Ticket</dt><dd>{money(g.ticket)}</dd></div>
+              <div><dt>R$/m²</dt><dd>{money(g.m2, purpose === 'aluguel' ? 2 : 0)}</dd></div>
+              <div><dt>Área</dt><dd>{g.area == null ? '—' : n(g.area) + ' m²'}</dd></div>
+            </dl>
+          </div>
+        ))}
+      </div>
+      <p className="small muted">Indicadores com pelo menos {MIN_SALE} anúncios por faixa.</p>
+    </section>
+  );
+}
+
+export function ListingAge({rows}: {rows: Listing[]}) {
+  const stats = useMemo(() => {
+    const ages = rows
+      .filter((r) => r.publicado)
+      .map((r) => Math.max(0, (new Date(r.data_coleta).getTime() - new Date(r.publicado!).getTime()) / DAY));
+    const buckets = [
+      {label: 'Até 30 dias', min: 0, max: 30, color: '#14806f'},
+      {label: '31 a 90 dias', min: 30, max: 90, color: '#5cc0a8'},
+      {label: '91 a 180 dias', min: 90, max: 180, color: '#e8c36a'},
+      {label: '181 dias a 1 ano', min: 180, max: 365, color: '#df8f45'},
+      {label: 'Mais de 1 ano', min: 365, max: Infinity, color: '#c4583a'},
+    ].map((b) => ({...b, count: ages.filter((a) => a >= b.min && a < b.max).length}));
+    return {ages, median: median(ages), buckets};
+  }, [rows]);
+  const total = stats.ages.length;
+  return (
+    <section className="panel age-panel">
+      <span className="eyebrow">LIQUIDEZ APARENTE</span>
+      <h2>Há quanto tempo os anúncios estão no ar</h2>
+      {total ? (
+        <>
+          <div className="age-headline">
+            <strong>{stats.median == null ? '—' : n(stats.median)} dias</strong>
+            <span>idade mediana do anúncio na data da coleta</span>
+          </div>
+          <div className="age-stack" role="img" aria-label="Distribuição da idade dos anúncios">
+            {stats.buckets.map((b) => b.count > 0 && <i key={b.label} style={{flexGrow: b.count, background: b.color}} title={b.label + ': ' + b.count} />)}
+          </div>
+          <ul className="age-legend">
+            {stats.buckets.map((b) => (
+              <li key={b.label}><i style={{background: b.color}} />{b.label}<strong>{share(b.count, total)}</strong></li>
+            ))}
+          </ul>
+          <p className="small muted">Calculado nos {n(total)} anúncios ({share(total, rows.length)} da seleção) em que o portal informa a data de publicação. Anúncio antigo pode indicar preço acima do mercado ou baixa procura; republicações zeram a contagem.</p>
+        </>
+      ) : (
+        <p className="small muted pulse-note">Nenhum anúncio desta seleção traz a data de publicação do portal. O indicador aparece quando a coleta incluir esse campo.</p>
+      )}
+    </section>
+  );
+}
