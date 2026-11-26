@@ -6,12 +6,14 @@ visão executiva, mapa, IBGE, ofertas, catálogo, histórico e relatórios.
 ## Gerar a versão pública
 
 Node 22.13 ou superior. Execute `npm ci` e `npm run build:pages` nesta pasta.
-O resultado vai para `../docs/curitiba`; a compilação preserva as bases JSON.
+O resultado vai para `../docs` (raiz do site); a compilação preserva as bases JSON.
+Todas as cidades usam a mesma página: o seletor de cidade troca os dados e a URL
+(`?cidade=Curitiba`, `?cidade=Londrina`). `docs/curitiba/` redireciona para `?cidade=Curitiba`.
 Publique `docs` pelo workflow **Publicar Hub Territorial**.
 
 ## Dados e armazenamento
 
-Anúncios e histórico públicos existentes são lidos de `docs/curitiba`.
+Anúncios e histórico públicos são lidos de `docs/curitiba/` (Curitiba) e da raiz `docs/` (Londrina).
 Não há dados privados, tokens ou credenciais no código do cliente.
 Estudos e importações feitos no GitHub Pages ficam no localStorage deste
 navegador, sem sincronização entre usuários/dispositivos. O histórico possui
