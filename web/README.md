@@ -7,8 +7,9 @@ visão executiva, mapa, IBGE, ofertas, catálogo, histórico e relatórios.
 
 Node 22.13 ou superior. Execute `npm ci` e `npm run build:pages` nesta pasta.
 O resultado vai para `../docs` (raiz do site); a compilação preserva as bases JSON.
-Todas as cidades usam a mesma página: o seletor de cidade troca os dados e a URL
-(`?cidade=Curitiba`, `?cidade=Londrina`). `docs/curitiba/` redireciona para `?cidade=Curitiba`.
+Um único endereço para todas as cidades: o seletor troca os dados e a escolha fica salva
+no navegador. `base: './'` deixa o site funcionar com qualquer nome de repositório.
+Malhas de bairros (IBGE, Censo 2022) ficam em `public/territorio/<código IBGE>.geojson`.
 Publique `docs` pelo workflow **Publicar Hub Territorial**.
 
 ## Dados e armazenamento
