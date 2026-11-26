@@ -1,4 +1,21 @@
-export const cities=[{name:'Londrina',code:'4113700',lat:-23.3045,lon:-51.1696},{name:'Maringá',code:'4115200',lat:-23.4205,lon:-51.9331},{name:'Curitiba',code:'4106902',lat:-25.4284,lon:-49.2733},{name:'Campinas',code:'3509502',lat:-22.9056,lon:-47.0608},{name:'Sorocaba',code:'3552205',lat:-23.5015,lon:-47.4526},{name:'Campo Grande',code:'5002704',lat:-20.4697,lon:-54.6201}];
+export type City={name:string;code:string;uf:string;lat:number;lon:number;mesh:boolean};
+export const cities:City[]=[
+ {name:'Curitiba',code:'4106902',uf:'PR',lat:-25.4284,lon:-49.2733,mesh:true},
+ {name:'Londrina',code:'4113700',uf:'PR',lat:-23.3045,lon:-51.1696,mesh:true},
+ {name:'Maringá',code:'4115200',uf:'PR',lat:-23.4205,lon:-51.9331,mesh:true},
+ {name:'Ponta Grossa',code:'4119905',uf:'PR',lat:-25.0945,lon:-50.1633,mesh:true},
+ {name:'Cascavel',code:'4104808',uf:'PR',lat:-24.9555,lon:-53.4552,mesh:true},
+ {name:'Foz do Iguaçu',code:'4108304',uf:'PR',lat:-25.5163,lon:-54.5854,mesh:true},
+ {name:'São José dos Pinhais',code:'4125506',uf:'PR',lat:-25.5313,lon:-49.2031,mesh:true},
+ {name:'Campinas',code:'3509502',uf:'SP',lat:-22.9056,lon:-47.0608,mesh:false},
+ {name:'Sorocaba',code:'3552205',uf:'SP',lat:-23.5015,lon:-47.4526,mesh:false},
+ {name:'Ribeirão Preto',code:'3543402',uf:'SP',lat:-21.1775,lon:-47.8103,mesh:true},
+ {name:'Jundiaí',code:'3525904',uf:'SP',lat:-23.1857,lon:-46.8978,mesh:true},
+ {name:'Piracicaba',code:'3538709',uf:'SP',lat:-22.7253,lon:-47.6492,mesh:true},
+ {name:'Santos',code:'3548500',uf:'SP',lat:-23.9608,lon:-46.3336,mesh:true},
+ {name:'Campo Grande',code:'5002704',uf:'MS',lat:-20.4697,lon:-54.6201,mesh:true},
+ {name:'Três Lagoas',code:'5008305',uf:'MS',lat:-20.7849,lon:-51.7007,mesh:true},
+];
 export type Area={lat:number;lon:number;radius:number};
 export type Listing={id:string;fonte:string;id_externo:string;cidade:string;titulo:string;bairro:string;finalidade:string;tipo:string;preco:number;area_m2:number|null;quartos:number|null;vagas:number|null;latitude:number|null;longitude:number|null;geo_precisao:string;url:string;data_coleta:string;metodo:string;condominio:number|null;iptu:number|null;empreendimento?:string;incorporadora?:string;torre?:string;unidade?:string;andar?:string;estagio?:string;publicado?:string};
 export function distance(lat:number,lon:number,a:Area){const r=Math.PI/180,dlat=(lat-a.lat)*r,dlon=(lon-a.lon)*r,h=Math.sin(dlat/2)**2+Math.cos(a.lat*r)*Math.cos(lat*r)*Math.sin(dlon/2)**2;return 6371*2*Math.asin(Math.sqrt(Math.min(1,h)))}

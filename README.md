@@ -30,7 +30,7 @@ O código está mantido privado. Nenhuma mudança de visibilidade foi aplicada a
 
 ## Apresentação web
 
-Uma única plataforma React (`web/`, publicada em `docs/`) atende todas as cidades: troque a cidade no menu lateral e a mesma página carrega os dados dela. Endereços: `…/hub-territorial-londrina/?cidade=Londrina` e `…/?cidade=Curitiba` (o antigo `…/curitiba/` redireciona). A Visão executiva traz venda × aluguel, radar de bairros com rentabilidade bruta anunciada, mix por dormitórios, idade dos anúncios e movimento semanal estimado (depende de coletas completas recorrentes).
+Uma única plataforma React (`web/`, publicada em `docs/`) atende todas as cidades: troque a cidade no menu lateral e a mesma página carrega os dados dela. Endereço único: https://joaostopa.github.io/hub-territorial/ (repositório `hub-territorial`); a cidade é escolhida dentro do sistema e lembrada no navegador. O antigo `…/curitiba/` abre o Hub já em Curitiba. A área **Projetos** guarda estudos de terreno/produto com mercado da região, posicionamento de preço, comparáveis e concorrência. A Visão executiva traz venda × aluguel, radar de bairros com rentabilidade bruta anunciada, mix por dormitórios, idade dos anúncios e movimento semanal estimado (depende de coletas completas recorrentes).
 
 Itens abaixo descrevem a versão anterior da página de Londrina:
 
