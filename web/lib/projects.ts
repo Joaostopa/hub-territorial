@@ -20,6 +20,11 @@ export type Project = {
   area: number | null;
   preco: number | null;
   unidades: number | null;
+  /** Viabilidade (opcional): custo do terreno em R$, custo de obra por m² construído, área construída ÷ privativa, despesas em % do VGV. */
+  custoTerreno: number | null;
+  custoObraM2: number | null;
+  fatorConstruida: number | null;
+  despesasPct: number | null;
   notas: string;
   criado: string;
   atualizado: string;
@@ -65,6 +70,10 @@ export function sanitize(raw: any): Project {
     area: positive(raw?.area, 100000),
     preco: positive(raw?.preco, 1e10),
     unidades: positive(raw?.unidades, 100000),
+    custoTerreno: positive(raw?.custoTerreno, 1e11),
+    custoObraM2: positive(raw?.custoObraM2, 1e6),
+    fatorConstruida: positive(raw?.fatorConstruida, 5),
+    despesasPct: positive(raw?.despesasPct, 90),
     notas: text(raw?.notas, 4000),
     criado: date(raw?.criado),
     atualizado: date(raw?.atualizado),
